@@ -59,17 +59,17 @@ class hashTableCell
 	/**
  	 * Locks the cell mutex
  	 */
-	void lockCell() ivan
+	void lockCell() ivan   // DONE
 	{
-		/*TODO: Add code for locking the cell mutex */
+		pthread_mutex_lock(&mutex);
 	}
 	
 	/**
  	 * Unlocks the cell mutex
  	 */
-	void unlockCell() ivan
+	void unlockCell() ivan // DONE
 	{
-		/* TODO: Add code for unlocking the cell mutex */
+		pthread_mutex_unlock(&mutex);
 	}
 
 		
@@ -104,10 +104,11 @@ int msqid;
 /* The ids that yet to be looked up */
 list<int> idsToLookUpList;
 
-ivan 
+//ivan DONE 
 /**
  * TODO: Declare and initialize a mutex for protecting the idsToLookUpList.
  */
+pthread_mutex_t listMutex = PTHREAD_MUTEX_INITIALIZER;
 
 ivan
 /**
