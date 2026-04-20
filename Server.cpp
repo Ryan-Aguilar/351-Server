@@ -110,17 +110,18 @@ list<int> idsToLookUpList;
  */
 pthread_mutex_t listMutex = PTHREAD_MUTEX_INITIALIZER;
 
-ivan
+//ivan DONE
 /**
  * TODO: declare and initialize the condition variable, threadPoolCondVar, 
  * for implementing a thread pool.
  */
+pthread_cond_t threadPoolCondVar = PTHREAD_COND_INITIALIZER;
 
-ivan
+//ivan DONE
 /* TODO: Declare the mutex, threadPoolMutex, for protecting the thread pool
  * condition variable. 
  */
-
+pthread_mutex_t threadPoolMutex = PTHREAD_MUTEX_INITIALIZER;
 
 /**
  * Prototype for createInserterThreads
@@ -426,16 +427,17 @@ void* threadPoolFunc(void* arg)
 /**
  * Wakes up a thread from the thread pool
  */
-ivan
+//ivan DONE
 void wakeUpThread()
 {
 	
 
 	/* TODO: Lock the mutex protecting threadPoolCondVar from race conditions */
-
+	pthread_mutex_lock(&threadPoolMutex);
 	/* TODO: Wake up a thread sleeping on threadPoolCondVar */
-	
+	pthread_cond_signal(&threadPoolCondVar);
 	/* TODO: Release the mutex protecting threadPoolCondVar from race conditions */
+	pthread_mutex_unlock(&threadPoolMutex);
 }
 
 /**
