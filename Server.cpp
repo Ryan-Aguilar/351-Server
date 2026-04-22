@@ -485,7 +485,7 @@ void createInserterThreads()
 /**
  * Called by parent thread to process incoming messages
  */
-ivan
+ivan //DONE
 void processIncomingMessages()
 {
 	/* The arriving message */
@@ -505,6 +505,7 @@ void processIncomingMessages()
 		addIdsToLookUp(msg.id);
 			
 		/* TODO: Wake up a thread to process the newly received id */
+		wakeUpThread();
 	}
 }
 
