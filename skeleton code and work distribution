@@ -214,7 +214,7 @@ void addToHashTable(const record& rec)
  * @return - the record from hashtable if exists;
  * otherwise returns a record with id field set to -1
  */
-ivan
+Aya
 record getHashTableRecord(const int& id)
 {
 	/* Get pointer to the hash table record */
@@ -329,7 +329,7 @@ int getIdsToLookUp()
  * Add id of record to look up
  * @param id - the id to process
  */
-ivan
+Aya
 void addIdsToLookUp(const int& id)
 {
 	/* TODO: Aquire idsToLookUpListMutex the list mutex */
