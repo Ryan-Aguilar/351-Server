@@ -251,7 +251,8 @@ void addToHashTable(const record& rec)
  * @return - the record from hashtable if exists;
  * otherwise returns a record with id field set to -1
  */
-ivan
+
+Aya
 record getHashTableRecord(const int& id)
 {
 	/* Get pointer to the hash table record */
@@ -265,6 +266,7 @@ record getHashTableRecord(const int& id)
 	/**
  	 * TODO: grab mutex of the cell
  	 */
+	hashTableCellPtr->lockCell();
 	
 	/* Get the iterator to the list of records hashing to this location */
 	list<record>::iterator recIt = hashTableCellPtr->recordList.begin();
@@ -290,6 +292,7 @@ record getHashTableRecord(const int& id)
  	 * TODO: release mutex of the cell. Hint: call unlockCell() to release
      *       mutex protecting the cell.
  	 */
+	hashTableCellPtr->unlockCell();
 	
 	return rec;
 }
@@ -366,22 +369,25 @@ int getIdsToLookUp()
  * Add id of record to look up
  * @param id - the id to process
  */
-ivan
+Aya
 void addIdsToLookUp(const int& id)
 {
 	/* TODO: Aquire idsToLookUpListMutex the list mutex */
-	
+	pthread_mutex_lock(&listMutex);
 		
 	/* Add the element to look up */
 	idsToLookUpList.push_back(id);
 		
 	/* TODO: Release the idsToLookUpList  */
+	pthread_mutex_unlock(&listMutex);
 }
 
 /**
  * The thread pool function
  * @param thread argument
  */
+
+
 ryan
 void* threadPoolFunc(void* arg)
 {
