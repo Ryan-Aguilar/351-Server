@@ -252,7 +252,7 @@ void addToHashTable(const record& rec)
  * otherwise returns a record with id field set to -1
  */
 
-Aya
+// Aya
 record getHashTableRecord(const int& id)
 {
 	/* Get pointer to the hash table record */
@@ -369,7 +369,7 @@ int getIdsToLookUp()
  * Add id of record to look up
  * @param id - the id to process
  */
-Aya
+// Aya
 void addIdsToLookUp(const int& id)
 {
 	/* TODO: Aquire idsToLookUpListMutex the list mutex */
