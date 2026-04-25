@@ -560,7 +560,13 @@ int main(int argc, char** argv)
 		exit(-1);
 	}
 	
-	/* TODO: install a signal handler for deallocating the message queue */	
+	/* TODO: install a signal handler for deallocating the message queue */
+	
+	// this is going to be a place holder for now, but I figured out we might 
+	// just need to call the cleanUp function for now with some bare minimum 
+	// parameter. so we pass in the SIGINT, and the cleanUp function. 4/25/26.
+	signal(SIGINT, cleanUp);
+	
 	
 	/* Populate the hash table */
 	populateHashTable(argv[1]);
