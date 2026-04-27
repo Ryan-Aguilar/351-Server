@@ -465,15 +465,6 @@ void createThreads(const int& numThreads)
 
 	for (int i = 0; i < numThreads; i++) 
 	{
-
-
-/**
- * Called by parent thread to process incoming messages
- */
-//DONE 
-void processIncomingMessages()
-{
-	
 		pthread_t tid;
 		pthread_create(&tid, &attr, threadPoolFunc, NULL);
 	}
@@ -490,10 +481,10 @@ void createInserterThreads()
       * by calling addNewRecords().
       */
     pthread_attr_t attr;
-    pthread_attr_int(&attr);
+    pthread_attr_init(&attr);
 
     /*creates the NUM_INSERTER threads*/
-    for(int = 0; i < NUM_INSERTERS; i++)
+    for(int i = 0; i < NUM_INSERTERS; i++)
     {
         pthread_t id;
         pthread_create(&id, &attr, addNewRecords, NULL);
