@@ -41,7 +41,7 @@ class hashTableCell
 	/**
  	 * Initialize the mutex
  	 */
-	hashTableCell() ryan  // DONE
+	hashTableCell() // DONE
 	{
 		pthread_mutex_init(&mutex, NULL);
 		/* Initialize the mutex using pthread_mutex_init() */
@@ -50,7 +50,7 @@ class hashTableCell
 	/**
  	 * Initialize the mutex
  	 */
-	~hashTableCell() ryan  // DONE
+	~hashTableCell() // DONE
 	{
 		/* Deallocate the mutex using pthread_mutex_destroy() */
 		pthread_mutex_destroy(&mutex);
@@ -59,7 +59,7 @@ class hashTableCell
 	/**
  	 * Locks the cell mutex
  	 */
-	void lockCell() ivan   // DONE
+	void lockCell()  // DONE
 	{
 		pthread_mutex_lock(&mutex);
 	}
@@ -67,7 +67,7 @@ class hashTableCell
 	/**
  	 * Unlocks the cell mutex
  	 */
-	void unlockCell() ivan // DONE
+	void unlockCell() // DONE
 	{
 		pthread_mutex_unlock(&mutex);
 	}
@@ -164,7 +164,7 @@ void* addNewRecords(void* arg);
 
 
 */
-ryan
+
 void cleanUp(int sig)
 {
 	/* Add code for deallocating the queue */
@@ -172,7 +172,7 @@ void cleanUp(int sig)
 	exit(0);
 }
 
-ryan // done already without having to add anything
+ // done already without having to add anything
 /**
  * Sends the message over the message queue
  * @param msqid - the message queue id
@@ -223,7 +223,7 @@ void printHashTable()
  * Adds a record to hashtable
  * @param rec - the record to add
  */
-ryan  // DONE
+  // DONE
 void addToHashTable(const record& rec)
 {
 	/**
@@ -345,24 +345,26 @@ int populateHashTable(const string& fileName)
  * @return - the id of record to look up, or
  * -1 if there is no work
  */
-ryan
+
 int getIdsToLookUp()
 {
-	/* The id */
-	int id = -1;
-	
-	/* TODO: Aquire the idsToLookUpListMutex mutex */
-	
-	/* Remove id from the list if exists */
-	if(!idsToLookUpList.empty()) 
+    /* The id */
+    int id = -1;
+    
+    /* TODO: Aquire the idsToLookUpListMutex mutex */
+    pthread_mutex_lock(&listMutex);
+    
+    /* Remove id from the list if exists */
+    if(!idsToLookUpList.empty()) 
     { 
         id = idsToLookUpList.front(); 
         idsToLookUpList.pop_front(); 
     }
-	
-	/* TODO: Release idsToLookUpListMutex  */
-	
-	return id;
+    
+    /* TODO: Release idsToLookUpListMutex  */
+    pthread_mutex_unlock(&listMutex);
+    
+    return id;
 }
 
 /**
@@ -388,47 +390,50 @@ void addIdsToLookUp(const int& id)
  */
 
 
-ryan
+
 void* threadPoolFunc(void* arg)
 {
-	/* The id to process */
-	int id = -1; 
-	
-	/* Sleep until work arrives */
-	while(true)
-	{
+    /* The id to process */
+    int id = -1;
+   
+    /* Sleep until work arrives */
+    while(true)
+    {
 
-		/* TODO: Lock the mutex protecting threadPoolCondVar from race conditions */
-		
-		/* Get the id to look up */
-		id = getIdsToLookUp();	
-			
-		/* No work to do */
-		while(id == -1)
-		{
-				
-			
-			/* TODO: Sleep on the condition variable threadPoolCondVar */
-			
-			/* Get the id to look up */
-			id = getIdsToLookUp();	
-			
-		}
-		
-		
-		/* TODO: Release the mutex protecting threadPoolCondVar from race conditions */
-		
-			
-		/* Look up id */
-		record rec = getHashTableRecord(id);
-		
-		
-		/* Send the record to the client */
-		sendRecord(msqid, rec);
-		
-	}
-	
+        /* TODO: Lock the mutex protecting threadPoolCondVar from race conditions */
+        pthread_mutex_lock(&threadPoolMutex);
+       
+        /* Get the id to look up */
+        id = getIdsToLookUp();    
+           
+        /* No work to do */
+        while(id == -1)
+        {
+               
+           
+            /* TODO: Sleep on the condition variable threadPoolCondVar */
+            pthread_cond_wait(&threadPoolCondVar, &threadPoolMutex);
+           
+            /* Get the id to look up */
+            id = getIdsToLookUp();    
+           
+        }
+       
+       
+        /* TODO: Release the mutex protecting threadPoolCondVar from race conditions */
+        pthread_mutex_unlock(&threadPoolMutex);
+           
+        /* Look up id */
+        record rec = getHashTableRecord(id);
+       
+       
+        /* Send the record to the client */
+        sendRecord(msqid, rec);
+       
+    }
+   
 }
+
 
 /**
  * Wakes up a thread from the thread pool
@@ -450,7 +455,7 @@ void wakeUpThread()
  * Creates the threads for looking up ids
  * @param numThreads - the number of threads to create
  */
-ryan // Done
+ // Done
 void createThreads(const int& numThreads)
 {
 	/** TODO: create numThreads threads that call threadPoolFunc() */
@@ -460,6 +465,15 @@ void createThreads(const int& numThreads)
 
 	for (int i = 0; i < numThreads; i++) 
 	{
+
+
+/**
+ * Called by parent thread to process incoming messages
+ */
+//DONE 
+void processIncomingMessages()
+{
+	
 		pthread_t tid;
 		pthread_create(&tid, &attr, threadPoolFunc, NULL);
 	}
@@ -469,15 +483,21 @@ void createThreads(const int& numThreads)
  * Creates threads that update the database
  * with randomly generated records
  */
-ryan
 void createInserterThreads()
 {
 
-	/* TODO: create NUM_INSERTERS threads that add new elements to the hashtable
- 	 * by calling addNewRecords(). 
- 	 */
+    /* TODO: create NUM_INSERTERS threads that add new elements to the hashtable
+      * by calling addNewRecords().
+      */
+    pthread_attr_t attr;
+    pthread_attr_int(&attr);
 
-
+    /*creates the NUM_INSERTER threads*/
+    for(int = 0; i < NUM_INSERTERS; i++)
+    {
+        pthread_t id;
+        pthread_create(&id, &attr, addNewRecords, NULL);
+    }
 
 }
 
@@ -485,7 +505,7 @@ void createInserterThreads()
 /**
  * Called by parent thread to process incoming messages
  */
-ivan //DONE
+//DONE 
 void processIncomingMessages()
 {
 	/* The arriving message */
